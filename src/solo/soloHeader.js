@@ -15,7 +15,7 @@ export function renderHeader(activeTab) {
     <header class="app-header">
       <div class="header-brand">
         <span class="header-logo">✦</span>
-        <span class="header-name">Greenbar Note</span>
+        <span class="header-name">Tahlk</span>
         <span class="header-badge">Beta</span>
       </div>
       <nav class="header-nav">${tabsHtml}</nav>

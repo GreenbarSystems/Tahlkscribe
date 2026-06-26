@@ -29,7 +29,7 @@ export async function saveDraftGenerated(encounterId, noteContent, transcript) {
 
   const entry = {
     action: 'generated',
-    actor: 'AI (Greenbar Note)',
+    actor: 'AI (Tahlk)',
     timestamp: nowISO(),
     contentHash,
     notes: '',

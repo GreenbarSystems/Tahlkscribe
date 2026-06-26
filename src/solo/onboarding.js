@@ -15,7 +15,7 @@ export function renderOnboarding() {
   return `
     <div class="onboarding-backdrop">
       <div class="onboarding-card">
-        <div class="onboarding-logo">✦ Greenbar Note</div>
+        <div class="onboarding-logo">✦ Tahlk</div>
         <h1 class="onboarding-title">Welcome. Let's get you set up.</h1>
         <p class="onboarding-sub">Takes about 3 minutes. Your data stays on this device.</p>
 
@@ -65,7 +65,7 @@ export function renderOnboarding() {
             <div class="step-num">3</div>
             <div class="step-body">
               <h3>Note generation API key</h3>
-              <p class="step-desc">Greenbar Note uses Claude (Anthropic) to turn transcripts into clinical notes. Enter your Anthropic API key — stored locally on this device only, never sent to Greenbar servers.</p>
+              <p class="step-desc">Tahlk uses Claude (Anthropic) to turn transcripts into clinical notes. Enter your Anthropic API key — stored locally on this device only, never sent to Tahlk servers.</p>
               <div class="field-row">
                 <label>Anthropic API key <span class="req">*</span></label>
                 <input id="ob-apikey" type="password" placeholder="sk-ant-…" autocomplete="off" />
@@ -77,7 +77,7 @@ export function renderOnboarding() {
         </div>
 
         <div class="onboarding-footer">
-          <button class="btn btn-primary btn-lg" id="ob-finish">Start using Greenbar Note</button>
+          <button class="btn btn-primary btn-lg" id="ob-finish">Start using Tahlk</button>
         </div>
       </div>
     </div>

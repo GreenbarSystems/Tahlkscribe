@@ -1,4 +1,4 @@
-# Greenbar Note — Developer Setup
+# Tahlk — Developer Setup
 
 ## Prerequisites
 
@@ -15,7 +15,7 @@
 npm install
 
 # Verify the JS build
-npm run build:solo       # should output dist-solo/ with no errors
+npm run build:solo       # outputs dist-solo/ with no errors
 
 # Run the build guard
 npm run test:build       # should print PASS
@@ -28,7 +28,7 @@ First `tauri:dev` will take 2–5 minutes to compile Rust dependencies.
 
 ## Whisper.cpp Sidecar (local transcription)
 
-The app ships with a whisper.cpp sidecar binary for local speech-to-text.
+The app uses a whisper.cpp sidecar binary for on-device speech-to-text.
 You need to provide the pre-compiled binary:
 
 1. Download `whisper.cpp` for your platform from:
@@ -46,7 +46,7 @@ You need to provide the pre-compiled binary:
 
 In the app's onboarding or Settings page, enter your Anthropic API key
 (console.anthropic.com → API Keys). The key is stored in the local SQLite
-database only — never sent to Greenbar servers.
+database only — never sent to any server.
 
 Long-term: once a HIPAA BAA is signed with Anthropic, the app will switch
 to a managed key and users won't need to provide their own.
@@ -54,19 +54,19 @@ to a managed key and users won't need to provide their own.
 ## Architecture
 
 ```
-src/core/       — storage, eventBus, capabilities (from Greenbar Clearing)
+src/core/       — storage, eventBus, capabilities seam
 src/scribe/     — recorder.js, transcriber.js, noteGenerator.js
-src/editor/     — noteEditor.js (sign-off + SHA-256 chain)
+src/editor/     — noteEditor.js (sign-off + SHA-256 audit chain)
 src/templates/  — 5 built-in behavioral health templates
 src/export/     — plain text / SimplePractice / TherapyNotes formatters
 src/solo/       — Solo UX: home, encounter panel, settings, onboarding
 src-tauri/      — Rust backend: SQLite KV + encounters + audio + LLM + export
 ```
 
-## Privacy Infrastructure (carried from Greenbar Clearing)
+## Privacy Architecture
 
 - **Local-first**: all data in SQLite on the user's device
 - **SHA-256 hash chain**: every note edit logged; sign-off binds to exact content
-- **API key in LOCAL_ONLY KV**: never accessible from JS (stored in Rust)
-- **Audio never leaves the device**: WAV written to app data dir, transcribed locally
-- **Tauri CSP**: no external scripts; Anthropic API whitelisted in connect-src
+- **API key in LOCAL_ONLY storage**: stored in Rust/SQLite, never accessible from JS
+- **Audio never leaves the device**: WAV written to app data dir, transcribed locally via whisper.cpp
+- **Tauri CSP**: no external scripts; Anthropic API whitelisted in connect-src only

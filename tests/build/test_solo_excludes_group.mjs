@@ -1,5 +1,5 @@
 // Build guard: walk the static import graph from entry-solo.js and fail if
-// any src/group/ module is reachable. Mirrors the pattern from Greenbar Clearing.
+// any src/group/ module is reachable.
 
 import { readFileSync, existsSync } from 'fs';
 import { resolve, dirname, join } from 'path';

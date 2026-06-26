@@ -1,13 +1,13 @@
 [package]
-name = "greenbar-note"
+name = "tahlk"
 version = "0.1.0"
-description = "Greenbar Note — ambient AI scribe for behavioral health"
-authors = ["Greenbar Systems"]
+description = "Tahlk — ambient AI scribe for behavioral health"
+authors = ["Tahlk"]
 edition = "2021"
 rust-version = "1.77"
 
 [lib]
-name = "greenbar_note_lib"
+name = "tahlk_lib"
 crate-type = ["staticlib", "cdylib", "rlib"]
 
 [build-dependencies]

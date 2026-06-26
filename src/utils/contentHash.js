@@ -4,8 +4,7 @@
 // and note text at the moment of sign-off. Any post-sign edit produces
 // a different hash, making silent modifications detectable.
 //
-// hashHistoryEntry + verifyHistoryChain are carried verbatim from
-// Greenbar Clearing — the tamper-evident audit-chain logic is domain-agnostic.
+// hashHistoryEntry + verifyHistoryChain implement a tamper-evident audit chain.
 
 // Compute SHA-256 fingerprint of a signed note.
 // Returns a 64-char hex string. Async because SubtleCrypto is async.

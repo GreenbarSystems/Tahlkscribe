@@ -1,8 +1,8 @@
 {
   "$schema": "https://schema.tauri.app/config/2",
-  "productName": "Greenbar Note",
+  "productName": "Tahlk",
   "version": "0.1.0",
-  "identifier": "com.greenbarsystems.note",
+  "identifier": "com.tahlk.app",
 
   "build": {
     "beforeDevCommand": "npm run dev:solo",
@@ -15,7 +15,7 @@
     "windows": [
       {
         "label": "main",
-        "title": "Greenbar Note",
+        "title": "Tahlk",
         "width": 1440,
         "height": 900,
         "minWidth": 1100,
@@ -41,7 +41,7 @@
       "icons/icon.ico"
     ],
     "category": "MedicalApp",
-    "copyright": "© Greenbar Systems",
+    "copyright": "© Tahlk",
     "longDescription": "Ambient AI scribe for independent behavioral health and psychiatry practices. Listens to patient encounters, generates structured clinical notes, and requires physician sign-off before finalization. Audio stays on your device.",
     "shortDescription": "Privacy-first AI scribe for behavioral health",
     "externalBin": ["binaries/whisper-cpp"]

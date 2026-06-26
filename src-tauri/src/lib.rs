@@ -10,7 +10,7 @@ use tauri_plugin_shell::ShellExt;
 
 struct DbState(Mutex<Connection>);
 
-// ── KV store (identical contract to Greenbar Clearing) ─────────────────────
+// ── KV store ──────────────────────────────────────────────────────────────
 
 #[tauri::command]
 fn kv_get(state: State<DbState>, key: String) -> Result<Option<Value>, String> {
@@ -76,7 +76,7 @@ fn kv_list(state: State<DbState>, prefix: String) -> Result<Vec<(String, Value)>
 fn data_location(app: AppHandle) -> Result<String, String> {
     app.path()
         .app_data_dir()
-        .map(|p| p.join("greenbar-note.db").to_string_lossy().into_owned())
+        .map(|p| p.join("tahlk.db").to_string_lossy().into_owned())
         .map_err(|e| e.to_string())
 }
 
@@ -332,7 +332,7 @@ async fn export_note_to_file(app: AppHandle, content: String, suggested_name: St
 fn open_database(app: &AppHandle) -> rusqlite::Result<Connection> {
     let data_dir = app.path().app_data_dir().expect("could not resolve app_data_dir");
     std::fs::create_dir_all(&data_dir).expect("could not create app data dir");
-    let db_path = data_dir.join("greenbar-note.db");
+    let db_path = data_dir.join("tahlk.db");
     let conn = Connection::open(&db_path)?;
     conn.execute_batch(
         "PRAGMA journal_mode = WAL;
