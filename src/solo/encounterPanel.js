@@ -8,7 +8,7 @@ import { generateNote } from '../scribe/noteGenerator.js';
 import { loadDraft, loadHistory, saveDraftGenerated, saveDraftEdited, signNote } from '../editor/noteEditor.js';
 import { listTemplates } from '../templates/templateLibrary.js';
 import {
-  toPlainText, toSimplePractice, toTherapyNotes,
+  exportFormatsFor, formatNote,
   copyToClipboard, saveToFile,
 } from '../export/exportFormatter.js';
 import { toast, fmtDuration, genId, nowISO, displayDate } from '../utils/format.js';
@@ -19,7 +19,8 @@ export function renderEncounterPanel(encounter) {
   const isSigned = encounter.status === 'signed';
   const draft = loadDraft(encounter.id) || '';
   const transcript = kvGet(TRANSCRIPT_KEY(encounter.id)) || '';
-  const templates = listTemplates();
+  const provider = kvGet('note_provider_v1::profile') || {};
+  const templates = listTemplates(provider.specialty);
 
   return `
     <div class="panel encounter-panel" data-encounter-id="${encounter.id}">
@@ -97,9 +98,7 @@ export function renderEncounterPanel(encounter) {
           `}
           <div class="export-controls">
             <select id="export-format">
-              <option value="plain">Plain text</option>
-              <option value="simplepractice">SimplePractice</option>
-              <option value="therapynotes">TherapyNotes</option>
+              ${exportFormatsFor(provider.specialty).map(f => `<option value="${f.id}">${f.label}</option>`).join('')}
             </select>
             <button class="btn btn-secondary" id="btn-copy" ${!draft ? 'disabled' : ''}>Copy</button>
             <button class="btn btn-secondary" id="btn-save-file" ${!draft ? 'disabled' : ''}>Save File</button>
@@ -163,6 +162,11 @@ export function wireEncounterPanel(encounter, onClose, onEncounterUpdated) {
         await startRecording();
         recordBtn.classList.add('btn-record--active');
         recordLabel.textContent = 'Stop Recording';
+        if (currentEncounter.status === 'new') {
+          currentEncounter.status = 'recording';
+          await tauriInvoke('upsert_encounter', { encounter: currentEncounter });
+          onEncounterUpdated(currentEncounter);
+        }
       } catch (e) {
         toast(e.message);
       }
@@ -258,9 +262,7 @@ export function wireEncounterPanel(encounter, onClose, onEncounterUpdated) {
   function getFormattedNote() {
     const note = document.getElementById('note-area')?.value || '';
     const fmt = document.getElementById('export-format')?.value || 'plain';
-    if (fmt === 'simplepractice') return toSimplePractice(note, currentEncounter);
-    if (fmt === 'therapynotes')   return toTherapyNotes(note, currentEncounter);
-    return toPlainText(note, currentEncounter);
+    return formatNote(fmt, note, currentEncounter);
   }
 
   document.getElementById('btn-copy')?.addEventListener('click', async () => {
@@ -289,6 +291,6 @@ function clearStatus() {
 }
 
 function statusLabel(status) {
-  return { recording: 'Recording', recording_done: 'Recorded', transcribing: 'Transcribing',
+  return { new: 'New', recording: 'Recording', recording_done: 'Recorded', transcribing: 'Transcribing',
            draft: 'Draft', signed: 'Signed', exported: 'Exported' }[status] || status;
 }

@@ -39,8 +39,28 @@ You need to provide the pre-compiled binary:
    - macOS ARM: `src-tauri/binaries/whisper-cpp-aarch64-apple-darwin`
    - macOS x86: `src-tauri/binaries/whisper-cpp-x86_64-apple-darwin`
 
-3. The Whisper model (ggml-base.en.bin, 142 MB) is downloaded on first run
-   via Settings → Download Transcription Model.
+3. The Whisper model (`ggml-base.en.bin`, ~142 MB) is **bundled with the app** as
+   a Tauri resource, so transcription works on first launch with no download.
+   Like the binary, it is gitignored — fetch it into `src-tauri/resources/` before
+   building:
+
+   ```powershell
+   # Windows
+   New-Item -ItemType Directory -Force src-tauri/resources | Out-Null
+   Invoke-WebRequest `
+     -Uri https://huggingface.co/ggerganov/whisper.cpp/resolve/main/ggml-base.en.bin `
+     -OutFile src-tauri/resources/ggml-base.en.bin
+   ```
+
+   ```sh
+   # macOS / Linux
+   mkdir -p src-tauri/resources
+   curl -L -o src-tauri/resources/ggml-base.en.bin \
+     https://huggingface.co/ggerganov/whisper.cpp/resolve/main/ggml-base.en.bin
+   ```
+
+   A user can still override the bundled model by downloading a fresh/larger copy
+   from Settings (saved to the app data dir, which takes precedence).
 
 ## Anthropic API Key (note generation)
 

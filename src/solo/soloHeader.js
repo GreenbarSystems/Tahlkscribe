@@ -2,7 +2,8 @@
 
 export function renderHeader(activeTab) {
   const tabs = [
-    { id: 'sessions',  label: 'Sessions' },
+    { id: 'sessions',  label: 'Sessions'  },
+    { id: 'patients',  label: 'Patients'  },
     { id: 'templates', label: 'Templates' },
     { id: 'settings',  label: 'Settings'  },
   ];
@@ -14,8 +15,7 @@ export function renderHeader(activeTab) {
   return `
     <header class="app-header">
       <div class="header-brand">
-        <span class="header-logo">✦</span>
-        <span class="header-name">Tahlk</span>
+        <img class="header-logo-img" src="/tahlk-logo.png" alt="Tahlk — AI-native ambient scribe" />
         <span class="header-badge">Beta</span>
       </div>
       <nav class="header-nav">${tabsHtml}</nav>

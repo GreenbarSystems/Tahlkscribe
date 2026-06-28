@@ -7,6 +7,7 @@ import { appendAudit } from '../core/auditLog.js';
 import { emit } from '../core/eventBus.js';
 import { computeNoteHash, hashHistoryEntry } from '../utils/contentHash.js';
 import { nowISO, genId } from '../utils/format.js';
+import { providerId } from '../core/capabilities.js';
 
 const CONTENT_KEY = id => `note_content_v1::${id}`;
 const HISTORY_KEY = id => `note_history_v1::${id}`;
@@ -93,7 +94,7 @@ export async function signNote(encounterId, noteContent, transcript, providerNam
   await tauriInvoke('upsert_encounter', {
     encounter: {
       id: encounterId,
-      provider_id: 'solo',
+      provider_id: providerId(),
       encounter_date: new Date().toISOString().slice(0, 10),
       status: 'signed',
       created_at: nowISO(),

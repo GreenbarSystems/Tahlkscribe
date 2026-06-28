@@ -19,6 +19,8 @@ export const KEY_PREFIXES = [
   'note_provider_v1',
   'note_settings_v1',
   'note_audit_v1',
+  'note_group_v1',
+  'note_patients_v1',
 ];
 
 // ── Tauri invoke helper ────────────────────────────────────────────────────
@@ -140,5 +142,43 @@ export function kvBackendInfo() {
   return { kind: _backend.kind, isTauri: IS_TAURI };
 }
 
-// Direct Tauri IPC for commands beyond KV.
-export function tauriInvoke(cmd, args) { return _tauriInvoke(cmd, args); }
+// ── Browser/demo fallback for non-KV Tauri commands ────────────────────────
+// Lets the UI be clicked through in a plain browser preview (no desktop SQLite
+// backend). Production runs in Tauri, where IS_TAURI is true and this is unused.
+const ENC_FALLBACK_KEY = 'note_encounters_fallback_v1';
+
+function _browserEncounters() {
+  try { return JSON.parse(localStorage.getItem(ENC_FALLBACK_KEY)) || []; }
+  catch { return []; }
+}
+
+function _browserInvoke(cmd, args) {
+  switch (cmd) {
+    case 'list_encounters': {
+      const list = _browserEncounters().sort((a, b) =>
+        String(b.encounter_date || '').localeCompare(String(a.encounter_date || '')) ||
+        String(b.created_at || '').localeCompare(String(a.created_at || '')));
+      return Promise.resolve(args && args.limit ? list.slice(0, args.limit) : list);
+    }
+    case 'upsert_encounter': {
+      const e = args && args.encounter;
+      if (!e) return Promise.resolve();
+      const list = _browserEncounters();
+      const i = list.findIndex(x => x.id === e.id);
+      if (i >= 0) list[i] = { ...list[i], ...e }; else list.push(e);
+      try { localStorage.setItem(ENC_FALLBACK_KEY, JSON.stringify(list)); } catch {}
+      return Promise.resolve();
+    }
+    case 'model_downloaded': return Promise.resolve(true);
+    case 'data_location':    return Promise.resolve('Browser preview — data kept in localStorage');
+    case 'save_audio_chunk': return Promise.resolve('');
+    default:
+      return Promise.reject(new Error(`"${cmd}" is only available in the desktop app.`));
+  }
+}
+
+// Direct Tauri IPC for commands beyond KV. In a plain browser (preview/demo),
+// falls back to a localStorage-backed stub so the UI stays clickable.
+export function tauriInvoke(cmd, args) {
+  return IS_TAURI ? _tauriInvoke(cmd, args) : _browserInvoke(cmd, args);
+}

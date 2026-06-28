@@ -2,4 +2,10 @@ node_modules/
 dist-solo/
 dist-group/
 src-tauri/target/
+src-tauri/binaries/
+src-tauri/resources/
+src-tauri/gen/
 package-lock.json
+.whisper-dl/
+.claude/
+*.log

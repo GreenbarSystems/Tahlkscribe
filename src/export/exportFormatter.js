@@ -1,9 +1,11 @@
-// Export formatters — plain text, SimplePractice, TherapyNotes, clipboard.
+// Export formatters — plain text, behavioral-health EHRs (SimplePractice,
+// TherapyNotes), podiatry EHRs (ModMed, eClinicalWorks), clipboard, file.
 
 import { tauriInvoke } from '../core/storageBackend.js';
 import { appendAudit } from '../core/auditLog.js';
 import { emit } from '../core/eventBus.js';
 import { displayDateShort } from '../utils/format.js';
+import { familyOf } from '../core/specialties.js';
 
 // Plain text — safe paste into any EHR.
 export function toPlainText(note, encounter) {
@@ -35,6 +37,57 @@ export function toTherapyNotes(note, encounter) {
     '',
     '--- Tahlk (AI-assisted) | Reviewed and attested by provider ---',
   ].join('\n');
+}
+
+// Kareo / Tebra — SMB practice-management EHR; encounter-note paste structure.
+export function toKareo(note, encounter) {
+  const date = displayDateShort(encounter.encounter_date || encounter.created_at);
+  const lines = [`Date of Service: ${date}`];
+  if (encounter.patient_alias) lines.push(`Patient: ${encounter.patient_alias}`);
+  lines.push('', note, '', '--- Tahlk (AI-assisted) | Reviewed and attested by provider ---');
+  return lines.join('\n');
+}
+
+// ModMed (EMA) — leading podiatry/derm EHR; encounter-note paste structure.
+export function toModMed(note, encounter) {
+  const date = displayDateShort(encounter.encounter_date || encounter.created_at);
+  const lines = [`Date of Service: ${date}`];
+  if (encounter.patient_alias) lines.push(`Patient: ${encounter.patient_alias}`);
+  lines.push('', note, '', '--- Tahlk (AI-assisted) | Reviewed and signed by provider ---');
+  return lines.join('\n');
+}
+
+// eClinicalWorks — multi-specialty EHR common in podiatry; progress-note paste.
+export function toEclinicalWorks(note, encounter) {
+  const date = displayDateShort(encounter.encounter_date || encounter.created_at);
+  const lines = [`Encounter Date: ${date}`];
+  if (encounter.patient_alias) lines.push(`Patient: ${encounter.patient_alias}`);
+  lines.push('', note, '', '--- Tahlk (AI-assisted) | Reviewed and attested by provider ---');
+  return lines.join('\n');
+}
+
+// Export-target registry. `family: null` = universal; otherwise scoped to a
+// specialty family (see core/specialties.js).
+export const EXPORT_FORMATS = [
+  { id: 'plain',          label: 'Plain text',     family: null,                fn: toPlainText },
+  { id: 'simplepractice', label: 'SimplePractice', family: 'behavioral-health', fn: toSimplePractice },
+  { id: 'therapynotes',   label: 'TherapyNotes',   family: 'behavioral-health', fn: toTherapyNotes },
+  { id: 'kareo',          label: 'Kareo / Tebra',  family: 'behavioral-health', fn: toKareo },
+  { id: 'modmed',         label: 'ModMed (EMA)',   family: 'podiatry',          fn: toModMed },
+  { id: 'ecw',            label: 'eClinicalWorks', family: 'podiatry',          fn: toEclinicalWorks },
+];
+
+// Export targets for a provider: universal formats plus their specialty family.
+// Unmapped/absent specialty → all formats (backward compatible).
+export function exportFormatsFor(specialty) {
+  const fam = familyOf(specialty);
+  return EXPORT_FORMATS.filter(f => f.family === null || fam === null || f.family === fam);
+}
+
+// Dispatch by format id; unknown id falls back to plain text.
+export function formatNote(id, note, encounter) {
+  const fmt = EXPORT_FORMATS.find(f => f.id === id) || EXPORT_FORMATS[0];
+  return fmt.fn(note, encounter);
 }
 
 // Copy formatted text to system clipboard via Tauri.

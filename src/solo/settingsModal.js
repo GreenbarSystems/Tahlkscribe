@@ -3,6 +3,7 @@
 import { kvGet, kvSet } from '../core/storageBackend.js';
 import { checkModelDownloaded, downloadModel } from '../scribe/transcriber.js';
 import { toast } from '../utils/format.js';
+import { specialtyLabel } from '../core/specialties.js';
 
 const PROVIDER_KEY = 'note_provider_v1::profile';
 
@@ -28,7 +29,7 @@ export async function renderSettings() {
         <div class="field-row">
           <label>Specialty</label>
           <select id="s-specialty">
-            ${['psychiatry','behavioral-health','psychology','other'].map(v =>
+            ${['psychiatry','behavioral-health','psychology','podiatry','other'].map(v =>
               `<option value="${v}" ${provider.specialty === v ? 'selected' : ''}>${specialtyLabel(v)}</option>`
             ).join('')}
           </select>
@@ -38,7 +39,7 @@ export async function renderSettings() {
 
       <section class="settings-section">
         <h3>Transcription Model (Whisper)</h3>
-        <p class="settings-desc">Local speech recognition — runs on this device. No audio sent to any server.</p>
+        <p class="settings-desc">Local speech recognition (Whisper base.en) — included with the app and runs entirely on this device. No audio is sent to any server.</p>
         <div class="model-status-row">
           <span class="model-status-icon">${modelOk ? '✓' : '✗'}</span>
           <span>${modelOk ? 'Whisper base.en model ready' : 'Model not downloaded'}</span>
@@ -68,7 +69,10 @@ export async function renderSettings() {
 
       <section class="settings-section settings-section--danger">
         <h3>Privacy</h3>
-        <p class="settings-desc">Audio recordings are stored in your OS app data directory and never leave this device. Transcripts and notes are stored in a local SQLite database. Nothing is sent to Tahlk servers.</p>
+        <p class="settings-desc">
+          <strong>Audio never leaves this device.</strong> Recordings stay in your OS app data directory and are transcribed locally.
+          To generate a note, the <strong>transcript text is sent to Anthropic (Claude)</strong> using your own API key — audio and your API key are never transmitted. Notes are stored in a local SQLite database on this device, and nothing is sent to Tahlk servers.
+        </p>
       </section>
     </div>
   `;
@@ -111,11 +115,6 @@ export function wireSettings() {
     kvSet('note_settings_v1::anthropic_api_key', null);
     toast('API key removed.');
   });
-}
-
-function specialtyLabel(v) {
-  return { psychiatry: 'Psychiatry', 'behavioral-health': 'Behavioral Health / Therapy',
-           psychology: 'Psychology', other: 'Other' }[v] || v;
 }
 
 function esc(s) {

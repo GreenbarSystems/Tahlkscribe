@@ -4,6 +4,7 @@ use reqwest::Client;
 use rusqlite::{params, Connection, OptionalExtension};
 use serde_json::{json, Value};
 use std::path::PathBuf;
+use tauri::path::BaseDirectory;
 use tauri::{AppHandle, Emitter, Manager, State};
 use tauri_plugin_dialog::DialogExt;
 use tauri_plugin_shell::ShellExt;
@@ -162,14 +163,28 @@ async fn save_audio_chunk(app: AppHandle, encounter_id: String, base64_data: Str
 
 // ── Whisper transcription ──────────────────────────────────────────────────
 
+// Location of an optional user-downloaded model (app data dir).
 fn model_path(app: &AppHandle) -> Result<PathBuf, String> {
     let dir = app.path().app_data_dir().map_err(|e| e.to_string())?.join("models");
     Ok(dir.join("ggml-base.en.bin"))
 }
 
+// The model used for transcription. A user-downloaded copy takes precedence
+// (lets a user swap in a larger model); otherwise the model bundled with the
+// app, so transcription works on first launch with no download.
+fn resolved_model_path(app: &AppHandle) -> Result<PathBuf, String> {
+    let downloaded = model_path(app)?;
+    if downloaded.exists() {
+        return Ok(downloaded);
+    }
+    app.path()
+        .resolve("resources/ggml-base.en.bin", BaseDirectory::Resource)
+        .map_err(|e| e.to_string())
+}
+
 #[tauri::command]
 async fn model_downloaded(app: AppHandle) -> Result<bool, String> {
-    Ok(tokio::fs::try_exists(model_path(&app)?).await.unwrap_or(false))
+    Ok(tokio::fs::try_exists(resolved_model_path(&app)?).await.unwrap_or(false))
 }
 
 #[tauri::command]
@@ -206,9 +221,9 @@ async fn download_whisper_model(app: AppHandle) -> Result<(), String> {
 
 #[tauri::command]
 async fn transcribe_audio(app: AppHandle, audio_path: String) -> Result<String, String> {
-    let model = model_path(&app)?;
+    let model = resolved_model_path(&app)?;
     if !tokio::fs::try_exists(&model).await.unwrap_or(false) {
-        return Err("Whisper model not downloaded. Open Settings → Download Transcription Model.".into());
+        return Err("Transcription model unavailable.".into());
     }
 
     let output_base = audio_path.trim_end_matches(".wav").to_string();

@@ -1,9 +1,12 @@
-// Templates view — browse built-in templates, create custom.
+// Templates view — browse templates for the provider's specialty, create custom.
 
 import { listTemplates } from '../templates/templateLibrary.js';
+import { kvGet } from '../core/storageBackend.js';
+import { specialtyLabel } from '../core/specialties.js';
 
 export function renderTemplatesView() {
-  const templates = listTemplates();
+  const provider = kvGet('note_provider_v1::profile') || {};
+  const templates = listTemplates(provider.specialty);
 
   return `
     <div class="templates-page">
@@ -26,9 +29,4 @@ function renderTemplateCard(t) {
       ${t.custom ? '<span class="tc-badge">Custom</span>' : '<span class="tc-badge tc-badge--builtin">Built-in</span>'}
     </div>
   `;
-}
-
-function specialtyLabel(v) {
-  return { psychiatry: 'Psychiatry', 'behavioral-health': 'Behavioral Health',
-           psychology: 'Psychology', general: 'General', other: 'Other' }[v] || v;
 }
