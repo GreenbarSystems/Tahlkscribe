@@ -1,0 +1,287 @@
+<title>Tahlk — About</title>
+<style>
+
+@font-face {
+  font-family: 'Montserrat';
+  font-style: normal;
+  font-weight: 400 700;
+  font-display: swap;
+  src: url(data:font/woff2;base64,__LATINEXT_B64__) format('woff2');
+  unicode-range: U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF;
+}
+@font-face {
+  font-family: 'Montserrat';
+  font-style: normal;
+  font-weight: 400 700;
+  font-display: swap;
+  src: url(data:font/woff2;base64,__LATIN_B64__) format('woff2');
+  unicode-range: U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;
+}
+
+:root {
+  --bg:            #f0f4ff;
+  --bg-elevated:   #ffffff;
+  --navy:          #0f1e5e;
+  --navy-deep:     #091236;
+  --ink:           #131b3a;
+  --ink-soft:      #4a5578;
+  --ink-faint:     #5b6690;
+  --line:          #d7ddf0;
+  --line-strong:   #b9c2e8;
+  --blue:          #2563eb;
+  --blue-mid:      #1d4ed8;
+  --teal:          #0d9488;
+  --teal-mid:      #0b7d74;
+  --teal-bright:   #2dd4bf;
+  --sky:           #7dd3fc;
+  --warn:          #9a4306;
+  --warn-bg:       #fef3c7;
+  --warn-line:     #f3d38a;
+  --radius:        8px;
+  --radius-lg:     16px;
+  --shadow:        0 1px 3px rgba(15,30,94,.10), 0 1px 2px rgba(15,30,94,.06);
+  --shadow-md:     0 16px 40px rgba(15,30,94,.16);
+  --mono:          ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #0a0f28; --bg-elevated: #121a44; --navy-deep: #060a1e;
+    --ink: #eef1ff; --ink-soft: #aab4dd; --ink-faint: #7783b3;
+    --line: #232c5c; --line-strong: #33407c;
+    --blue: #5b8def; --blue-mid: #3b6fe0;
+    --teal: #2dd4bf; --teal-mid: #14b8a6; --sky: #8fdcff;
+    --warn: #f0b955; --warn-bg: #2c2408; --warn-line: #4a3c10;
+    --shadow: 0 1px 3px rgba(0,0,0,.35), 0 1px 2px rgba(0,0,0,.3);
+    --shadow-md: 0 20px 50px rgba(0,0,0,.5);
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0a0f28; --bg-elevated: #121a44; --navy-deep: #060a1e;
+  --ink: #eef1ff; --ink-soft: #aab4dd; --ink-faint: #7783b3;
+  --line: #232c5c; --line-strong: #33407c;
+  --blue: #5b8def; --blue-mid: #3b6fe0;
+  --teal: #2dd4bf; --teal-mid: #14b8a6; --sky: #8fdcff;
+  --warn: #f0b955; --warn-bg: #2c2408; --warn-line: #4a3c10;
+  --shadow: 0 1px 3px rgba(0,0,0,.35), 0 1px 2px rgba(0,0,0,.3);
+  --shadow-md: 0 20px 50px rgba(0,0,0,.5);
+}
+:root[data-theme="light"] {
+  --bg: #f0f4ff; --bg-elevated: #ffffff; --navy-deep: #091236;
+  --ink: #131b3a; --ink-soft: #4a5578; --ink-faint: #5b6690;
+  --line: #d7ddf0; --line-strong: #b9c2e8;
+  --blue: #2563eb; --blue-mid: #1d4ed8;
+  --teal: #0d9488; --teal-mid: #0b7d74; --sky: #7dd3fc;
+  --warn: #9a4306; --warn-bg: #fef3c7; --warn-line: #f3d38a;
+  --shadow: 0 1px 3px rgba(15,30,94,.10), 0 1px 2px rgba(15,30,94,.06);
+  --shadow-md: 0 16px 40px rgba(15,30,94,.16);
+}
+
+* , *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { color-scheme: light dark; }
+body {
+  font-family: 'Montserrat', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  background: var(--bg); color: var(--ink); line-height: 1.55; -webkit-font-smoothing: antialiased;
+}
+h1, h2, h3 { font-weight: 700; text-wrap: balance; color: var(--ink); }
+p { text-wrap: pretty; }
+a { color: inherit; }
+img, svg { display: block; max-width: 100%; }
+.wrap { max-width: 1180px; margin-inline: auto; padding-inline: clamp(1.25rem, 4vw, 3rem); }
+.eyebrow { font-size: .72rem; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--teal-mid); }
+.mono { font-family: var(--mono); font-size: .82em; letter-spacing: -0.01em; }
+:focus-visible { outline: 2px solid var(--blue); outline-offset: 3px; border-radius: 4px; }
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 0.001ms !important; animation-iteration-count: 1 !important; transition-duration: 0.001ms !important; scroll-behavior: auto !important; }
+}
+
+.nav { background: var(--navy); color: #fff; }
+.nav .wrap { display: flex; align-items: center; gap: 2rem; padding-block: .85rem; }
+.brand { display: flex; align-items: center; gap: .55rem; font-weight: 700; font-size: 1.05rem; letter-spacing: -0.01em; text-decoration: none; }
+.nav-links { display: flex; gap: 1.6rem; margin-inline-start: auto; font-size: .87rem; font-weight: 500; }
+.nav-links a { opacity: .82; text-decoration: none; transition: opacity .15s ease; white-space: nowrap; }
+.nav-links a:hover { opacity: 1; }
+.nav-links a.current { opacity: 1; border-bottom: 2px solid var(--teal-bright); padding-bottom: .2rem; }
+.btn { display: inline-flex; align-items: center; gap: .45rem; border-radius: var(--radius); font-weight: 600; font-size: .88rem; padding: .62rem 1.1rem; border: 1px solid transparent; cursor: pointer; text-decoration: none; transition: transform .15s ease, box-shadow .15s ease, background .15s ease; }
+.btn-primary { background: var(--teal); color: #fff; box-shadow: var(--shadow); }
+.btn-primary:hover { background: var(--teal-mid); transform: translateY(-1px); }
+.btn-ghost-dark { border-color: rgba(255,255,255,.3); color: #fff; }
+.btn-ghost-dark:hover { border-color: rgba(255,255,255,.65); }
+
+.beta-banner { background: var(--warn-bg); border-bottom: 1px solid var(--warn-line); color: var(--warn); }
+.beta-banner .wrap { display: flex; align-items: center; gap: .6rem; padding-block: .5rem; font-size: .82rem; font-weight: 600; }
+.beta-banner strong { font-weight: 700; }
+
+.page-hero { background: linear-gradient(180deg, var(--navy) 0%, var(--navy-deep) 100%); color: #fff; padding-block: clamp(2.4rem, 5vw, 3.6rem) clamp(2.6rem, 5vw, 3.8rem); }
+.page-hero .eyebrow { color: var(--teal-bright); }
+.page-hero h1 { color: #fff; font-size: clamp(1.9rem, 3.6vw, 2.7rem); margin-block: .7rem .9rem; letter-spacing: -0.01em; max-width: 22ch; }
+.page-hero p { color: rgba(255,255,255,.82); max-width: 62ch; font-size: 1.02rem; }
+
+section { padding-block: clamp(3rem, 6vw, 5rem); }
+.section-head { max-width: 68ch; margin-bottom: clamp(2rem, 4vw, 2.6rem); }
+.section-head h2 { font-size: clamp(1.5rem, 2.8vw, 2rem); margin-top: .5rem; letter-spacing: -0.01em; }
+.section-head p { color: var(--ink-soft); margin-top: .8rem; font-size: 1.02rem; max-width: 62ch; }
+.section-alt { background: var(--bg-elevated); border-block: 1px solid var(--line); }
+
+/* Sibling-products proof strip */
+.sibling-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+@media (max-width: 820px) { .sibling-grid { grid-template-columns: 1fr; } }
+.sibling-card { background: var(--bg-elevated); border: 1px solid var(--line); border-radius: var(--radius-lg); padding: 1.6rem 1.5rem; box-shadow: var(--shadow); }
+.sibling-card .name { font-family: var(--mono); font-size: .74rem; color: var(--ink-faint); }
+.sibling-card h3 { font-size: 1.05rem; margin-block: .35rem .6rem; }
+.sibling-card p { color: var(--ink-soft); font-size: .92rem; }
+.thread-note { margin-top: 1.6rem; padding: 1.3rem 1.4rem; background: var(--bg); border: 1px dashed var(--line-strong); border-radius: var(--radius-lg); font-size: .95rem; color: var(--ink-soft); }
+.thread-note strong { color: var(--ink); }
+
+/* Principles list */
+.principle-list { display: flex; flex-direction: column; }
+.principle { display: grid; grid-template-columns: 1.4rem 1fr; gap: 1rem; padding-block: 1.3rem; border-top: 1px solid var(--line); }
+.principle:first-child { border-top: none; }
+.principle .dot { width: .55rem; height: .55rem; border-radius: 50%; background: var(--teal); margin-top: .5rem; }
+.principle h3 { font-size: 1rem; margin-bottom: .35rem; }
+.principle p { color: var(--ink-soft); font-size: .93rem; max-width: 66ch; }
+
+.candor-box { background: var(--bg); border: 1px dashed var(--line-strong); border-radius: var(--radius-lg); padding: 1.6rem 1.5rem; }
+.candor-box h3 { font-size: .92rem; text-transform: uppercase; letter-spacing: .05em; color: var(--ink-faint); margin-bottom: .9rem; font-weight: 700; }
+.candor-box p { color: var(--ink-soft); font-size: .94rem; }
+
+.cta-box { background: linear-gradient(135deg, var(--navy) 0%, var(--navy-deep) 100%); color: #fff; border-radius: var(--radius-lg); padding: clamp(2rem, 5vw, 3rem); display: flex; flex-wrap: wrap; gap: 1.75rem; align-items: center; justify-content: space-between; }
+.cta-box h2 { color: #fff; font-size: clamp(1.4rem, 3vw, 1.8rem); max-width: 26ch; }
+.cta-box p { color: rgba(255,255,255,.78); margin-top: .5rem; max-width: 44ch; font-size: .95rem; }
+
+footer { padding-block: 2.4rem 3rem; border-top: 1px solid var(--line); }
+.footer-grid { display: flex; flex-wrap: wrap; gap: 1rem 2rem; justify-content: space-between; align-items: center; }
+.footer-links { display: flex; gap: 1.4rem; font-size: .85rem; color: var(--ink-soft); flex-wrap: wrap; }
+.footer-links a { text-decoration: none; }
+.footer-links a:hover { color: var(--teal-mid); }
+.footer-byline { font-size: .82rem; color: var(--ink-faint); }
+</style>
+
+<header class="nav">
+  <div class="wrap">
+    <a class="brand" href="index.html">
+      <svg width="28" height="26" viewBox="0 0 42 38" aria-hidden="true">
+        <defs><linearGradient id="tlg-nav-about" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0%" stop-color="#2DD4BF"/><stop offset="100%" stop-color="#7DD3FC"/>
+        </linearGradient></defs>
+        <circle cx="22" cy="18" r="14" fill="none" stroke="url(#tlg-nav-about)" stroke-width="2.8"/>
+        <path d="M12 29L5 37L20 31" fill="none" stroke="url(#tlg-nav-about)" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/>
+        <circle cx="9" cy="6" r="2" fill="#2DD4BF"/>
+        <circle cx="4" cy="12" r="1.2" fill="#2DD4BF"/>
+        <rect x="19" y="11" width="6" height="14" rx="1.5" fill="white"/>
+        <rect x="15" y="15" width="14" height="6" rx="1.5" fill="white"/>
+      </svg>
+      Tahlk
+    </a>
+    <nav class="nav-links">
+      <a href="security.html">Security</a>
+      <a href="compliance.html">Compliance</a>
+      <a href="how-it-works.html">How it works</a>
+      <a href="get-started.html">Get started</a>
+    </nav>
+    <a class="btn btn-ghost-dark" href="get-started.html">Start the beta</a>
+  </div>
+</header>
+
+<div class="beta-banner">
+  <div class="wrap">
+    <span aria-hidden="true">&#9888;</span>
+    <span><strong>Limited beta.</strong> Access is rolling out in stages — talk to us before onboarding real patient data.</span>
+  </div>
+</div>
+
+<section class="page-hero">
+  <div class="wrap">
+    <p class="eyebrow">About</p>
+    <h1>We build the parts of software that have to survive an audit.</h1>
+    <p>Greenbar Systems is the company behind Tahlk. Before we built a scribe for behavioral health and podiatry, we built the same kind of tamper-evident, local-first architecture for a different regulated problem — because that's the default we start from, not a feature we added for healthcare.</p>
+  </div>
+</section>
+
+<section id="pattern">
+  <div class="wrap">
+    <div class="section-head">
+      <p class="eyebrow">Not our first hash chain</p>
+      <h2>The same integrity pattern, in a different regulated domain.</h2>
+    </div>
+    <div class="sibling-grid">
+      <div class="sibling-card">
+        <span class="name">Greenbar Clearing</span>
+        <h3>Local-first bank reconciliation</h3>
+        <p>A SHA-256-hash-chained audit ledger with a role-gated maker/checker workflow — reconciled transactions are sealed the same way a signed clinical note is in Tahlk, and for the same reason: the record needs to prove it wasn't altered, not just claim it.</p>
+      </div>
+      <div class="sibling-card">
+        <span class="name">AccessSpec</span>
+        <h3>Accessibility compliance, before code ships</h3>
+        <p>A dashboard that catches WCAG issues at the spec and PR stage instead of after an app is built — the same instinct as Tahlk's compliance scope-determination work: do the compliance thinking before it's forced on you, not after.</p>
+      </div>
+    </div>
+    <p class="thread-note"><strong>The throughline:</strong> tamper-evident by construction, compliant by default, and honest about what's still a gap. Tahlk isn't a healthcare company bolting on security — it's this pattern applied to behavioral health and podiatry.</p>
+  </div>
+</section>
+
+<section class="section-alt" id="why-tahlk">
+  <div class="wrap">
+    <div class="section-head">
+      <p class="eyebrow">Why Tahlk</p>
+      <h2>Why behavioral health and podiatry, and why local-first.</h2>
+      <p>Behavioral health carries some of the strictest confidentiality law in healthcare — 42 CFR Part 2, state mental-health confidentiality statutes, the newer state consumer-health-data laws. Podiatry runs on high visit volume where documentation time is the bottleneck. Both needed a scribe that treats on-device transcription and a tamper-evident record as non-negotiable defaults, not a "trust us" cloud pipeline with compliance bolted on afterward.</p>
+    </div>
+  </div>
+</section>
+
+<section id="principles">
+  <div class="wrap">
+    <div class="section-head">
+      <p class="eyebrow">What we won't compromise on</p>
+      <h2>Principles, not features.</h2>
+    </div>
+    <div class="principle-list">
+      <div class="principle">
+        <span class="dot"></span>
+        <div><h3>Local-first is the default, not an option</h3><p>Audio and transcription stay on the device unless there's one deliberate, disclosed reason for something to leave it.</p></div>
+      </div>
+      <div class="principle">
+        <span class="dot"></span>
+        <div><h3>A record should be able to prove itself</h3><p>Hash-chained, tamper-evident signing isn't a Tahlk-only idea — it's how we think a record should work anywhere it needs to survive scrutiny.</p></div>
+      </div>
+      <div class="principle">
+        <span class="dot"></span>
+        <div><h3>Say what's a draft and what's shipped</h3><p>Compliance determinations, security controls, and roadmap items are labeled as what they actually are — see <a href="compliance.html" style="color:var(--teal-mid); font-weight:600;">Compliance</a> and <a href="security.html" style="color:var(--teal-mid); font-weight:600;">Security</a> for what that looks like in practice.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="candor">
+  <div class="wrap">
+    <div class="candor-box">
+      <h3>What's not on this page</h3>
+      <p>We've kept this page to what we can back up: the architecture, the products, and the reasoning behind them. Team, location, and company history will be added here as those pages are finalized, rather than filled in with placeholder biography.</p>
+    </div>
+  </div>
+</section>
+
+<section id="cta">
+  <div class="wrap">
+    <div class="cta-box">
+      <div>
+        <h2>Questions about the company?</h2>
+        <p>Reach out — we're happy to talk through anything on this page in more depth.</p>
+      </div>
+      <a class="btn btn-primary" href="#">Contact us</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap footer-grid">
+    <div class="footer-byline">Greenbar Systems — makers of Tahlk</div>
+    <nav class="footer-links">
+      <a href="security.html">Security</a>
+      <a href="compliance.html">Compliance</a>
+      <a href="about.html" class="current">About</a>
+      <a href="legal.html">Legal</a>
+      <a href="#">Contact</a>
+    </nav>
+  </div>
+</footer>

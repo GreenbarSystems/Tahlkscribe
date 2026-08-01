@@ -1,0 +1,350 @@
+<title>Tahlk — Security</title>
+<style>
+
+/* ---------------------------------------------------------------
+   Fonts — exact self-hosted Montserrat files from Tahlk's own
+   public/fonts/, inlined as data URIs (Artifact CSP blocks font
+   CDNs). Reproduced as variable-weight ranges, one blob per subset.
+------------------------------------------------------------------ */
+@font-face {
+  font-family: 'Montserrat';
+  font-style: normal;
+  font-weight: 400 700;
+  font-display: swap;
+  src: url(data:font/woff2;base64,__LATINEXT_B64__) format('woff2');
+  unicode-range: U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF;
+}
+@font-face {
+  font-family: 'Montserrat';
+  font-style: normal;
+  font-weight: 400 700;
+  font-display: swap;
+  src: url(data:font/woff2;base64,__LATIN_B64__) format('woff2');
+  unicode-range: U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;
+}
+
+/* ---------------------------------------------------------------
+   Tokens — same palette as the shipping app (styles/solo.css)
+   and the Tahlk homepage draft, kept identical across pages.
+------------------------------------------------------------------ */
+:root {
+  --bg:            #f0f4ff;
+  --bg-elevated:   #ffffff;
+  --navy:          #0f1e5e;
+  --navy-deep:     #091236;
+  --ink:           #131b3a;
+  --ink-soft:      #4a5578;
+  --ink-faint:     #5b6690;
+  --line:          #d7ddf0;
+  --line-strong:   #b9c2e8;
+  --blue:          #2563eb;
+  --blue-mid:      #1d4ed8;
+  --teal:          #0d9488;
+  --teal-mid:      #0b7d74;
+  --teal-bright:   #2dd4bf;
+  --sky:           #7dd3fc;
+  --warn:          #9a4306;
+  --warn-bg:       #fef3c7;
+  --warn-line:     #f3d38a;
+  --radius:        8px;
+  --radius-lg:     16px;
+  --shadow:        0 1px 3px rgba(15,30,94,.10), 0 1px 2px rgba(15,30,94,.06);
+  --shadow-md:     0 16px 40px rgba(15,30,94,.16);
+  --mono:          ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #0a0f28; --bg-elevated: #121a44; --navy-deep: #060a1e;
+    --ink: #eef1ff; --ink-soft: #aab4dd; --ink-faint: #7783b3;
+    --line: #232c5c; --line-strong: #33407c;
+    --blue: #5b8def; --blue-mid: #3b6fe0;
+    --teal: #2dd4bf; --teal-mid: #14b8a6; --sky: #8fdcff;
+    --warn: #f0b955; --warn-bg: #2c2408; --warn-line: #4a3c10;
+    --shadow: 0 1px 3px rgba(0,0,0,.35), 0 1px 2px rgba(0,0,0,.3);
+    --shadow-md: 0 20px 50px rgba(0,0,0,.5);
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0a0f28; --bg-elevated: #121a44; --navy-deep: #060a1e;
+  --ink: #eef1ff; --ink-soft: #aab4dd; --ink-faint: #7783b3;
+  --line: #232c5c; --line-strong: #33407c;
+  --blue: #5b8def; --blue-mid: #3b6fe0;
+  --teal: #2dd4bf; --teal-mid: #14b8a6; --sky: #8fdcff;
+  --warn: #f0b955; --warn-bg: #2c2408; --warn-line: #4a3c10;
+  --shadow: 0 1px 3px rgba(0,0,0,.35), 0 1px 2px rgba(0,0,0,.3);
+  --shadow-md: 0 20px 50px rgba(0,0,0,.5);
+}
+:root[data-theme="light"] {
+  --bg: #f0f4ff; --bg-elevated: #ffffff; --navy-deep: #091236;
+  --ink: #131b3a; --ink-soft: #4a5578; --ink-faint: #5b6690;
+  --line: #d7ddf0; --line-strong: #b9c2e8;
+  --blue: #2563eb; --blue-mid: #1d4ed8;
+  --teal: #0d9488; --teal-mid: #0b7d74; --sky: #7dd3fc;
+  --warn: #9a4306; --warn-bg: #fef3c7; --warn-line: #f3d38a;
+  --shadow: 0 1px 3px rgba(15,30,94,.10), 0 1px 2px rgba(15,30,94,.06);
+  --shadow-md: 0 16px 40px rgba(15,30,94,.16);
+}
+
+* , *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { color-scheme: light dark; }
+body {
+  font-family: 'Montserrat', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  background: var(--bg); color: var(--ink); line-height: 1.55; -webkit-font-smoothing: antialiased;
+}
+h1, h2, h3 { font-weight: 700; text-wrap: balance; color: var(--ink); }
+p { text-wrap: pretty; }
+a { color: inherit; }
+img, svg { display: block; max-width: 100%; }
+.wrap { max-width: 1180px; margin-inline: auto; padding-inline: clamp(1.25rem, 4vw, 3rem); }
+.eyebrow { font-size: .72rem; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--teal-mid); }
+.mono { font-family: var(--mono); font-size: .82em; letter-spacing: -0.01em; }
+:focus-visible { outline: 2px solid var(--blue); outline-offset: 3px; border-radius: 4px; }
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 0.001ms !important; animation-iteration-count: 1 !important; transition-duration: 0.001ms !important; scroll-behavior: auto !important; }
+}
+
+/* Nav */
+.nav { background: var(--navy); color: #fff; }
+.nav .wrap { display: flex; align-items: center; gap: 2rem; padding-block: .85rem; }
+.brand { display: flex; align-items: center; gap: .55rem; font-weight: 700; font-size: 1.05rem; letter-spacing: -0.01em; text-decoration: none; }
+.nav-links { display: flex; gap: 1.6rem; margin-inline-start: auto; font-size: .87rem; font-weight: 500; }
+.nav-links a { opacity: .82; text-decoration: none; transition: opacity .15s ease; }
+.nav-links a:hover { opacity: 1; }
+.nav-links a.current { opacity: 1; border-bottom: 2px solid var(--teal-bright); padding-bottom: .2rem; }
+.btn { display: inline-flex; align-items: center; gap: .45rem; border-radius: var(--radius); font-weight: 600; font-size: .88rem; padding: .62rem 1.1rem; border: 1px solid transparent; cursor: pointer; text-decoration: none; transition: transform .15s ease, box-shadow .15s ease, background .15s ease; }
+.btn-primary { background: var(--teal); color: #fff; box-shadow: var(--shadow); }
+.btn-primary:hover { background: var(--teal-mid); transform: translateY(-1px); }
+.btn-ghost-dark { border-color: rgba(255,255,255,.3); color: #fff; }
+.btn-ghost-dark:hover { border-color: rgba(255,255,255,.65); }
+
+/* Beta banner */
+.beta-banner { background: var(--warn-bg); border-bottom: 1px solid var(--warn-line); color: var(--warn); }
+.beta-banner .wrap { display: flex; align-items: center; gap: .6rem; padding-block: .5rem; font-size: .82rem; font-weight: 600; }
+.beta-banner strong { font-weight: 700; }
+
+/* Page hero — restrained, informational (not the marketing hero) */
+.page-hero { background: linear-gradient(180deg, var(--navy) 0%, var(--navy-deep) 100%); color: #fff; padding-block: clamp(2.4rem, 5vw, 3.6rem) clamp(2.6rem, 5vw, 3.8rem); }
+.page-hero .eyebrow { color: var(--teal-bright); }
+.page-hero h1 { color: #fff; font-size: clamp(1.9rem, 3.6vw, 2.7rem); margin-block: .7rem .9rem; letter-spacing: -0.01em; max-width: 22ch; }
+.page-hero p { color: rgba(255,255,255,.82); max-width: 62ch; font-size: 1.02rem; }
+
+section { padding-block: clamp(3rem, 6vw, 5rem); }
+.section-head { max-width: 68ch; margin-bottom: clamp(2rem, 4vw, 2.6rem); }
+.section-head h2 { font-size: clamp(1.5rem, 2.8vw, 2rem); margin-top: .5rem; letter-spacing: -0.01em; }
+.section-head p { color: var(--ink-soft); margin-top: .8rem; font-size: 1.02rem; max-width: 62ch; }
+.section-alt { background: var(--bg-elevated); border-block: 1px solid var(--line); }
+
+/* Data-flow steps (reused rhythm from the homepage's How-it-works list) */
+.flow-list { display: flex; flex-direction: column; }
+.flow-step { display: grid; grid-template-columns: 2.6rem 1fr; gap: 1.1rem; padding-block: 1.2rem; border-top: 1px solid var(--line); }
+.flow-step:first-child { border-top: none; }
+.flow-num { font-family: var(--mono); font-size: .95rem; color: var(--teal-mid); font-weight: 700; }
+.flow-step h3 { font-size: 1.04rem; margin-bottom: .35rem; display: flex; align-items: center; gap: .6rem; flex-wrap: wrap; }
+.flow-step p { color: var(--ink-soft); font-size: .94rem; max-width: 66ch; }
+.tag { font-family: var(--mono); font-size: .66rem; letter-spacing: .03em; text-transform: uppercase; padding: .2rem .5rem; border-radius: 999px; font-weight: 600; }
+.tag-device { background: #ecfdf7; color: var(--teal-mid); border: 1px solid #b8ece1; }
+.tag-network { background: #eff6ff; color: var(--blue-mid); border: 1px solid #bfd9ff; }
+.tag-gate { background: var(--bg); color: var(--ink-soft); border: 1px solid var(--line-strong); }
+:root[data-theme="dark"] .tag-device, @media (prefers-color-scheme: dark) { }
+.tag-device { }
+
+/* Control cards */
+.card-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.4rem; }
+@media (max-width: 920px) { .card-grid { grid-template-columns: 1fr 1fr; } }
+@media (max-width: 620px) { .card-grid { grid-template-columns: 1fr; } }
+.control-card { background: var(--bg-elevated); border: 1px solid var(--line); border-radius: var(--radius-lg); padding: 1.5rem 1.35rem; box-shadow: var(--shadow); }
+.control-card h3 { font-size: 1.02rem; margin-bottom: .55rem; }
+.control-card p { color: var(--ink-soft); font-size: .92rem; }
+.control-card .mono-line { display: block; margin-top: .7rem; color: var(--ink-faint); font-size: .74rem; }
+
+/* Roadmap + candor sections */
+.list-plain { display: flex; flex-direction: column; gap: 1.3rem; }
+.list-plain-item { display: grid; grid-template-columns: 1.4rem 1fr; gap: .9rem; }
+.list-plain-item .dot { width: .55rem; height: .55rem; border-radius: 50%; background: var(--teal); margin-top: .5rem; }
+.list-plain-item h3 { font-size: 1rem; margin-bottom: .3rem; }
+.list-plain-item p { color: var(--ink-soft); font-size: .93rem; max-width: 68ch; }
+
+.candor-box { background: var(--bg); border: 1px dashed var(--line-strong); border-radius: var(--radius-lg); padding: 1.6rem 1.5rem; }
+.candor-box h3 { font-size: .92rem; text-transform: uppercase; letter-spacing: .05em; color: var(--ink-faint); margin-bottom: 1rem; font-weight: 700; }
+
+footer { padding-block: 2.4rem 3rem; border-top: 1px solid var(--line); }
+.footer-grid { display: flex; flex-wrap: wrap; gap: 1rem 2rem; justify-content: space-between; align-items: center; }
+.footer-links { display: flex; gap: 1.4rem; font-size: .85rem; color: var(--ink-soft); }
+.footer-links a { text-decoration: none; }
+.footer-links a:hover { color: var(--teal-mid); }
+.footer-byline { font-size: .82rem; color: var(--ink-faint); }
+</style>
+
+<header class="nav">
+  <div class="wrap">
+    <a class="brand" href="index.html">
+      <svg width="28" height="26" viewBox="0 0 42 38" aria-hidden="true">
+        <defs><linearGradient id="tlg-nav-sec" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0%" stop-color="#2DD4BF"/><stop offset="100%" stop-color="#7DD3FC"/>
+        </linearGradient></defs>
+        <circle cx="22" cy="18" r="14" fill="none" stroke="url(#tlg-nav-sec)" stroke-width="2.8"/>
+        <path d="M12 29L5 37L20 31" fill="none" stroke="url(#tlg-nav-sec)" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/>
+        <circle cx="9" cy="6" r="2" fill="#2DD4BF"/>
+        <circle cx="4" cy="12" r="1.2" fill="#2DD4BF"/>
+        <rect x="19" y="11" width="6" height="14" rx="1.5" fill="white"/>
+        <rect x="15" y="15" width="14" height="6" rx="1.5" fill="white"/>
+      </svg>
+      Tahlk
+    </a>
+    <nav class="nav-links">
+      <a href="security.html" class="current">Security</a>
+      <a href="compliance.html">Compliance</a>
+      <a href="how-it-works.html">How it works</a>
+      <a href="get-started.html">Get started</a>
+    </nav>
+    <a class="btn btn-ghost-dark" href="get-started.html">Start the beta</a>
+  </div>
+</header>
+
+<div class="beta-banner">
+  <div class="wrap">
+    <span aria-hidden="true">&#9888;</span>
+    <span><strong>Limited beta.</strong> Access is rolling out in stages — talk to us before onboarding real patient data.</span>
+  </div>
+</div>
+
+<section class="page-hero">
+  <div class="wrap">
+    <p class="eyebrow">Security</p>
+    <h1>What happens to a recording, from the first second to the signature.</h1>
+    <p>Tahlk is built so that describing the architecture <em>is</em> the security pitch. Below is the exact path a session takes, and the control in force at every step — not a summary written to sound reassuring, but the actual data flow.</p>
+  </div>
+</section>
+
+<section id="flow">
+  <div class="wrap">
+    <div class="section-head">
+      <p class="eyebrow">The data path</p>
+      <h2>Seven steps, one network call.</h2>
+      <p>Everything below is on the clinician's device unless a step is explicitly marked otherwise. Only one step ever sends anything off the device.</p>
+    </div>
+    <div class="flow-list">
+      <div class="flow-step">
+        <span class="flow-num">01</span>
+        <div><h3>Capture <span class="tag tag-device">On device</span></h3><p>Microphone audio is captured locally through the OS audio APIs. Nothing leaves the device at this stage.</p></div>
+      </div>
+      <div class="flow-step">
+        <span class="flow-num">02</span>
+        <div><h3>Encrypt before the first disk write <span class="tag tag-device">On device</span></h3><p>Audio is AES-256-GCM encrypted before it is ever written to disk, using a key derived from the database key via HKDF-SHA256 — a separate key, so a weakness in one can't compromise the other. Each file gets a fresh nonce; a tampered file fails to decrypt rather than opening silently.</p></div>
+      </div>
+      <div class="flow-step">
+        <span class="flow-num">03</span>
+        <div><h3>Transcribe <span class="tag tag-device">On device</span></h3><p>A bundled speech-recognition model (Whisper) turns audio into text with no network call — nothing to download separately, nothing uploaded.</p></div>
+      </div>
+      <div class="flow-step">
+        <span class="flow-num">04</span>
+        <div><h3>Compliance gate <span class="tag tag-gate">Checked before anything else</span></h3><p>Before the transcript is touched in any way, Tahlk checks that a signed BAA/EULA acknowledgment is on file. No acknowledgment, no call — the transcript does not move.</p></div>
+      </div>
+      <div class="flow-step">
+        <span class="flow-num">05</span>
+        <div><h3>Generate the note <span class="tag tag-network">The one step that leaves the device</span></h3><p>The transcript is sent once, over TLS, to Greenbar's managed proxy, which forwards it to Anthropic under Greenbar's Business Associate Agreement and Anthropic's zero-data-retention terms. Clinicians never hold their own Anthropic key — there is no separate account to manage or lose track of.</p></div>
+      </div>
+      <div class="flow-step">
+        <span class="flow-num">06</span>
+        <div><h3>Store <span class="tag tag-device">On device</span></h3><p>The note, transcript, and audit trail are written to a SQLCipher-encrypted local database.</p></div>
+      </div>
+      <div class="flow-step">
+        <span class="flow-num">07</span>
+        <div><h3>Sign &amp; export <span class="tag tag-device">On device</span></h3><p>Signing locks the note and seals a SHA-256 fingerprint into a running hash chain. Export is provider-directed — a native Save-As dialog or clipboard, never automatic.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section-alt" id="controls">
+  <div class="wrap">
+    <div class="section-head">
+      <p class="eyebrow">What's protecting it</p>
+      <h2>The controls in force today.</h2>
+    </div>
+    <div class="card-grid">
+      <div class="control-card">
+        <h3>Encrypted at rest</h3>
+        <p>The clinical database is SQLCipher-encrypted. Audio is encrypted independently under its own HKDF-derived key, so the two stores don't share a single point of failure.</p>
+      </div>
+      <div class="control-card">
+        <h3>Application-layer authentication</h3>
+        <p>A master password gates every launch: PBKDF2 at 210,000 iterations, AES-256-GCM key wrapping, and three offline recovery codes generated at setup. Shipped and enforced — not an optional setting.</p>
+      </div>
+      <div class="control-card">
+        <h3>Tamper-evident signing</h3>
+        <p>Every signed note is chained by SHA-256 hash the instant it's signed. A note's integrity can be verified independent of anyone's word, including ours.</p>
+      </div>
+      <div class="control-card">
+        <h3>Screen-capture protection</h3>
+        <p>An opt-in setting blocks the app window from screen recording and screen-sharing tools, on macOS and Windows. Off by default, so it never silently breaks a legitimate telehealth share — and there's currently no equivalent on Linux. We say so rather than imply otherwise.</p>
+      </div>
+      <div class="control-card">
+        <h3>Encrypted, recoverable backups</h3>
+        <p>A one-click encrypted export, keyed by a separate passphrase from your login password, plus a staged and crash-safe restore path — so a lost or failed device doesn't mean a lost record.</p>
+      </div>
+      <div class="control-card">
+        <h3>Managed key, enforced gate</h3>
+        <p>Clinicians never hold an Anthropic key or manage a separate AI vendor relationship. Every note-generation call checks for a signed BAA/EULA before it's allowed to run, every time.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="roadmap">
+  <div class="wrap">
+    <div class="section-head">
+      <p class="eyebrow">In progress</p>
+      <h2>What's being built next.</h2>
+    </div>
+    <div class="list-plain">
+      <div class="list-plain-item">
+        <span class="dot"></span>
+        <div><h3>Biometric unlock</h3><p>Touch ID and Windows Hello as a faster alternative to the password on supported platforms — additive to the existing recovery codes, not a replacement for them.</p></div>
+      </div>
+      <div class="list-plain-item">
+        <span class="dot"></span>
+        <div><h3>Configurable retention &amp; deletion</h3><p>Provider-set retention periods, a confirmed destruction flow for records past that window, and a documented, auditable record of every destruction event.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section-alt" id="candor">
+  <div class="wrap">
+    <div class="section-head">
+      <p class="eyebrow">Said plainly</p>
+      <h2>What we tell you rather than gloss over.</h2>
+    </div>
+    <div class="candor-box">
+      <h3>Residual risk &amp; recommendations</h3>
+      <div class="list-plain">
+        <div class="list-plain-item">
+          <span class="dot"></span>
+          <div><p>We recommend enabling full-disk encryption (FileVault on macOS, BitLocker on Windows) as a complementary control alongside Tahlk's own encryption — it protects against a different part of the threat model than an application password does.</p></div>
+        </div>
+        <div class="list-plain-item">
+          <span class="dot"></span>
+          <div><p>Losing your password, all three recovery codes, and biometric access at the same time means the records on that device are not recoverable, by design — no one, including Greenbar, holds a spare key that would let us reset it for you.</p></div>
+        </div>
+        <div class="list-plain-item">
+          <span class="dot"></span>
+          <div><p>Screen-capture protection is opt-in and has no equivalent on Linux today. Treat any remote-support or screen-share session where PHI is visible as something to actively manage, regardless of platform.</p></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap footer-grid">
+    <div class="footer-byline">Greenbar Systems — makers of Tahlk</div>
+    <nav class="footer-links">
+      <a href="security.html">Security</a>
+      <a href="compliance.html">Compliance</a>
+      <a href="about.html">About</a>
+      <a href="legal.html">Legal</a>
+      <a href="#">Contact</a>
+    </nav>
+  </div>
+</footer>

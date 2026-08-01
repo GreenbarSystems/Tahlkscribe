@@ -1,0 +1,335 @@
+<title>Tahlk — How It Works</title>
+<style>
+
+@font-face {
+  font-family: 'Montserrat';
+  font-style: normal;
+  font-weight: 400 700;
+  font-display: swap;
+  src: url(data:font/woff2;base64,__LATINEXT_B64__) format('woff2');
+  unicode-range: U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF;
+}
+@font-face {
+  font-family: 'Montserrat';
+  font-style: normal;
+  font-weight: 400 700;
+  font-display: swap;
+  src: url(data:font/woff2;base64,__LATIN_B64__) format('woff2');
+  unicode-range: U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;
+}
+
+:root {
+  --bg:            #f0f4ff;
+  --bg-elevated:   #ffffff;
+  --navy:          #0f1e5e;
+  --navy-deep:     #091236;
+  --ink:           #131b3a;
+  --ink-soft:      #4a5578;
+  --ink-faint:     #5b6690;
+  --line:          #d7ddf0;
+  --line-strong:   #b9c2e8;
+  --blue:          #2563eb;
+  --blue-mid:      #1d4ed8;
+  --teal:          #0d9488;
+  --teal-mid:      #0b7d74;
+  --teal-bright:   #2dd4bf;
+  --sky:           #7dd3fc;
+  --warn:          #9a4306;
+  --warn-bg:       #fef3c7;
+  --warn-line:     #f3d38a;
+  --radius:        8px;
+  --radius-lg:     16px;
+  --shadow:        0 1px 3px rgba(15,30,94,.10), 0 1px 2px rgba(15,30,94,.06);
+  --shadow-md:     0 16px 40px rgba(15,30,94,.16);
+  --mono:          ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #0a0f28; --bg-elevated: #121a44; --navy-deep: #060a1e;
+    --ink: #eef1ff; --ink-soft: #aab4dd; --ink-faint: #7783b3;
+    --line: #232c5c; --line-strong: #33407c;
+    --blue: #5b8def; --blue-mid: #3b6fe0;
+    --teal: #2dd4bf; --teal-mid: #14b8a6; --sky: #8fdcff;
+    --warn: #f0b955; --warn-bg: #2c2408; --warn-line: #4a3c10;
+    --shadow: 0 1px 3px rgba(0,0,0,.35), 0 1px 2px rgba(0,0,0,.3);
+    --shadow-md: 0 20px 50px rgba(0,0,0,.5);
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0a0f28; --bg-elevated: #121a44; --navy-deep: #060a1e;
+  --ink: #eef1ff; --ink-soft: #aab4dd; --ink-faint: #7783b3;
+  --line: #232c5c; --line-strong: #33407c;
+  --blue: #5b8def; --blue-mid: #3b6fe0;
+  --teal: #2dd4bf; --teal-mid: #14b8a6; --sky: #8fdcff;
+  --warn: #f0b955; --warn-bg: #2c2408; --warn-line: #4a3c10;
+  --shadow: 0 1px 3px rgba(0,0,0,.35), 0 1px 2px rgba(0,0,0,.3);
+  --shadow-md: 0 20px 50px rgba(0,0,0,.5);
+}
+:root[data-theme="light"] {
+  --bg: #f0f4ff; --bg-elevated: #ffffff; --navy-deep: #091236;
+  --ink: #131b3a; --ink-soft: #4a5578; --ink-faint: #5b6690;
+  --line: #d7ddf0; --line-strong: #b9c2e8;
+  --blue: #2563eb; --blue-mid: #1d4ed8;
+  --teal: #0d9488; --teal-mid: #0b7d74; --sky: #7dd3fc;
+  --warn: #9a4306; --warn-bg: #fef3c7; --warn-line: #f3d38a;
+  --shadow: 0 1px 3px rgba(15,30,94,.10), 0 1px 2px rgba(15,30,94,.06);
+  --shadow-md: 0 16px 40px rgba(15,30,94,.16);
+}
+
+* , *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { color-scheme: light dark; }
+body {
+  font-family: 'Montserrat', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  background: var(--bg); color: var(--ink); line-height: 1.55; -webkit-font-smoothing: antialiased;
+}
+h1, h2, h3 { font-weight: 700; text-wrap: balance; color: var(--ink); }
+p { text-wrap: pretty; }
+a { color: inherit; }
+img, svg { display: block; max-width: 100%; }
+.wrap { max-width: 1180px; margin-inline: auto; padding-inline: clamp(1.25rem, 4vw, 3rem); }
+.eyebrow { font-size: .72rem; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--teal-mid); }
+.mono { font-family: var(--mono); font-size: .82em; letter-spacing: -0.01em; }
+:focus-visible { outline: 2px solid var(--blue); outline-offset: 3px; border-radius: 4px; }
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 0.001ms !important; animation-iteration-count: 1 !important; transition-duration: 0.001ms !important; scroll-behavior: auto !important; }
+}
+
+.nav { background: var(--navy); color: #fff; }
+.nav .wrap { display: flex; align-items: center; gap: 2rem; padding-block: .85rem; }
+.brand { display: flex; align-items: center; gap: .55rem; font-weight: 700; font-size: 1.05rem; letter-spacing: -0.01em; text-decoration: none; }
+.nav-links { display: flex; gap: 1.6rem; margin-inline-start: auto; font-size: .87rem; font-weight: 500; }
+.nav-links a { opacity: .82; text-decoration: none; transition: opacity .15s ease; white-space: nowrap; }
+.nav-links a:hover { opacity: 1; }
+.nav-links a.current { opacity: 1; border-bottom: 2px solid var(--teal-bright); padding-bottom: .2rem; }
+.btn { display: inline-flex; align-items: center; gap: .45rem; border-radius: var(--radius); font-weight: 600; font-size: .88rem; padding: .62rem 1.1rem; border: 1px solid transparent; cursor: pointer; text-decoration: none; transition: transform .15s ease, box-shadow .15s ease, background .15s ease; }
+.btn-primary { background: var(--teal); color: #fff; box-shadow: var(--shadow); }
+.btn-primary:hover { background: var(--teal-mid); transform: translateY(-1px); }
+.btn-ghost-dark { border-color: rgba(255,255,255,.3); color: #fff; }
+.btn-ghost-dark:hover { border-color: rgba(255,255,255,.65); }
+
+.beta-banner { background: var(--warn-bg); border-bottom: 1px solid var(--warn-line); color: var(--warn); }
+.beta-banner .wrap { display: flex; align-items: center; gap: .6rem; padding-block: .5rem; font-size: .82rem; font-weight: 600; }
+.beta-banner strong { font-weight: 700; }
+
+.page-hero { background: linear-gradient(180deg, var(--navy) 0%, var(--navy-deep) 100%); color: #fff; padding-block: clamp(2.4rem, 5vw, 3.6rem) clamp(2.6rem, 5vw, 3.8rem); }
+.page-hero .eyebrow { color: var(--teal-bright); }
+.page-hero h1 { color: #fff; font-size: clamp(1.9rem, 3.6vw, 2.7rem); margin-block: .7rem .9rem; letter-spacing: -0.01em; max-width: 24ch; }
+.page-hero p { color: rgba(255,255,255,.82); max-width: 62ch; font-size: 1.02rem; }
+
+section { padding-block: clamp(3rem, 6vw, 5rem); }
+.section-head { max-width: 68ch; margin-bottom: clamp(2rem, 4vw, 2.6rem); }
+.section-head h2 { font-size: clamp(1.5rem, 2.8vw, 2rem); margin-top: .5rem; letter-spacing: -0.01em; }
+.section-head p { color: var(--ink-soft); margin-top: .8rem; font-size: 1.02rem; max-width: 62ch; }
+.section-alt { background: var(--bg-elevated); border-block: 1px solid var(--line); }
+
+/* Loop recap strip — condensed, links out to Security for depth */
+.recap-strip { display: flex; align-items: center; flex-wrap: wrap; gap: 0; border: 1px solid var(--line); border-radius: var(--radius-lg); background: var(--bg-elevated); box-shadow: var(--shadow); overflow: hidden; }
+.recap-node { flex: 1 1 0; min-width: 7rem; padding: 1.1rem .9rem; text-align: center; border-right: 1px solid var(--line); }
+.recap-node:last-child { border-right: none; }
+.recap-node .n { font-family: var(--mono); font-size: .68rem; color: var(--teal-mid); font-weight: 700; letter-spacing: .04em; }
+.recap-node .t { font-weight: 600; font-size: .92rem; margin-top: .3rem; }
+.recap-link { margin-top: 1.1rem; font-size: .88rem; }
+.recap-link a { color: var(--teal-mid); font-weight: 600; text-decoration: none; border-bottom: 1px solid var(--teal-mid); }
+
+/* Template showcase */
+.template-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.4rem; }
+@media (max-width: 720px) { .template-grid { grid-template-columns: 1fr; } }
+.template-card { background: var(--bg-elevated); border: 1px solid var(--line); border-radius: var(--radius-lg); padding: 1.4rem 1.4rem; box-shadow: var(--shadow); }
+.template-card .file { font-family: var(--mono); font-size: .74rem; color: var(--ink-faint); }
+.template-card h3 { font-size: 1.0rem; margin-block: .35rem .5rem; }
+.template-card p { color: var(--ink-soft); font-size: .9rem; }
+.template-note { margin-top: 1.6rem; font-size: .9rem; color: var(--ink-soft); border-top: 1px dashed var(--line-strong); padding-top: 1rem; }
+
+/* Practice-shape section: patients / sessions */
+.split { display: grid; grid-template-columns: 1fr; gap: 1.6rem; }
+@media (min-width: 880px) { .split { grid-template-columns: 1fr 1fr; } }
+.stat-card { background: var(--bg-elevated); border: 1px solid var(--line); border-radius: var(--radius-lg); padding: 1.6rem 1.5rem; box-shadow: var(--shadow); }
+.stat-row { display: flex; gap: 1.6rem; margin-top: 1.1rem; }
+.stat { }
+.stat .num { font-family: var(--mono); font-size: 1.7rem; font-weight: 700; color: var(--ink); }
+.stat .lbl { font-size: .78rem; color: var(--ink-faint); text-transform: uppercase; letter-spacing: .04em; margin-top: .2rem; }
+.feature-list { display: flex; flex-direction: column; gap: 1.2rem; }
+.feature-list-item h3 { font-size: 1rem; margin-bottom: .3rem; }
+.feature-list-item p { color: var(--ink-soft); font-size: .92rem; }
+
+/* Export chips */
+.export-row { display: flex; flex-wrap: wrap; gap: .8rem; margin-top: 1.4rem; }
+.export-chip { display: flex; align-items: center; gap: .5rem; background: var(--bg-elevated); border: 1px solid var(--line); border-radius: 999px; padding: .5rem 1rem; font-size: .88rem; font-weight: 600; box-shadow: var(--shadow); }
+.export-chip .dot { width: .5rem; height: .5rem; border-radius: 50%; background: var(--teal); }
+
+.cta-box { background: linear-gradient(135deg, var(--navy) 0%, var(--navy-deep) 100%); color: #fff; border-radius: var(--radius-lg); padding: clamp(2rem, 5vw, 3rem); display: flex; flex-wrap: wrap; gap: 1.75rem; align-items: center; justify-content: space-between; }
+.cta-box h2 { color: #fff; font-size: clamp(1.4rem, 3vw, 1.8rem); max-width: 26ch; }
+.cta-box p { color: rgba(255,255,255,.78); margin-top: .5rem; max-width: 44ch; font-size: .95rem; }
+
+footer { padding-block: 2.4rem 3rem; border-top: 1px solid var(--line); }
+.footer-grid { display: flex; flex-wrap: wrap; gap: 1rem 2rem; justify-content: space-between; align-items: center; }
+.footer-links { display: flex; gap: 1.4rem; font-size: .85rem; color: var(--ink-soft); }
+.footer-links a { text-decoration: none; }
+.footer-links a:hover { color: var(--teal-mid); }
+.footer-byline { font-size: .82rem; color: var(--ink-faint); }
+</style>
+
+<header class="nav">
+  <div class="wrap">
+    <a class="brand" href="index.html">
+      <svg width="28" height="26" viewBox="0 0 42 38" aria-hidden="true">
+        <defs><linearGradient id="tlg-nav-how" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0%" stop-color="#2DD4BF"/><stop offset="100%" stop-color="#7DD3FC"/>
+        </linearGradient></defs>
+        <circle cx="22" cy="18" r="14" fill="none" stroke="url(#tlg-nav-how)" stroke-width="2.8"/>
+        <path d="M12 29L5 37L20 31" fill="none" stroke="url(#tlg-nav-how)" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/>
+        <circle cx="9" cy="6" r="2" fill="#2DD4BF"/>
+        <circle cx="4" cy="12" r="1.2" fill="#2DD4BF"/>
+        <rect x="19" y="11" width="6" height="14" rx="1.5" fill="white"/>
+        <rect x="15" y="15" width="14" height="6" rx="1.5" fill="white"/>
+      </svg>
+      Tahlk
+    </a>
+    <nav class="nav-links">
+      <a href="security.html">Security</a>
+      <a href="compliance.html">Compliance</a>
+      <a href="how-it-works.html" class="current">How it works</a>
+      <a href="get-started.html">Get started</a>
+    </nav>
+    <a class="btn btn-ghost-dark" href="get-started.html">Start the beta</a>
+  </div>
+</header>
+
+<div class="beta-banner">
+  <div class="wrap">
+    <span aria-hidden="true">&#9888;</span>
+    <span><strong>Limited beta.</strong> Access is rolling out in stages — talk to us before onboarding real patient data.</span>
+  </div>
+</div>
+
+<section class="page-hero">
+  <div class="wrap">
+    <p class="eyebrow">How it works</p>
+    <h1>From a conversation to a signed note — without you touching a keyboard.</h1>
+    <p>The record-to-sign loop is the mechanism. What makes Tahlk usable in an actual practice is what surrounds it: templates built for how behavioral-health and podiatry clinicians actually chart, a patient roster instead of a folder of files, and a note that stays editable until the moment you decide it's final.</p>
+  </div>
+</section>
+
+<section id="loop">
+  <div class="wrap">
+    <div class="section-head">
+      <p class="eyebrow">The loop, at a glance</p>
+      <h2>Five steps. One of them touches the network.</h2>
+    </div>
+    <div class="recap-strip">
+      <div class="recap-node"><div class="n">01</div><div class="t">Record</div></div>
+      <div class="recap-node"><div class="n">02</div><div class="t">Transcribe</div></div>
+      <div class="recap-node"><div class="n">03</div><div class="t">Generate note</div></div>
+      <div class="recap-node"><div class="n">04</div><div class="t">Review &amp; edit</div></div>
+      <div class="recap-node"><div class="n">05</div><div class="t">Sign &amp; export</div></div>
+    </div>
+    <p class="recap-link"><a href="security.html#flow">See exactly what happens to that data at every step →</a></p>
+  </div>
+</section>
+
+<section class="section-alt" id="templates">
+  <div class="wrap">
+    <div class="section-head">
+      <p class="eyebrow">Templates</p>
+      <h2>Built for how you actually chart, not a generic note.</h2>
+      <p>Pick a template when you generate a note, and Tahlk drafts into that structure instead of a one-size-fits-all format.</p>
+    </div>
+    <div class="template-grid">
+      <div class="template-card">
+        <span class="file">crisis-assess</span>
+        <h3>Crisis assessment</h3>
+        <p>Structured for an acute-risk visit — presenting concern, risk factors, safety plan, disposition.</p>
+      </div>
+      <div class="template-card">
+        <span class="file">psych-eval</span>
+        <h3>Psychiatric evaluation</h3>
+        <p>A full intake-style structure: history, mental status exam, diagnostic impression, plan.</p>
+      </div>
+      <div class="template-card">
+        <span class="file">med-mgmt</span>
+        <h3>Medication management</h3>
+        <p>Built for a follow-up visit centered on response to treatment, side effects, and regimen changes.</p>
+      </div>
+      <div class="template-card">
+        <span class="file">therapy-progress</span>
+        <h3>Therapy progress note</h3>
+        <p>Session-by-session progress notes — interventions used, response, plan for next session.</p>
+      </div>
+    </div>
+    <p class="template-note">Podiatry visits draft into their own note structure as well. As Tahlk extends into further specialties (see <a href="index.html#specialties" style="color:var(--teal-mid); font-weight:600;">where we're starting</a>), each one gets templates built for its own documentation, not a behavioral-health template stretched to fit.</p>
+  </div>
+</section>
+
+<section id="practice">
+  <div class="wrap">
+    <div class="section-head">
+      <p class="eyebrow">Built for a real practice</p>
+      <h2>A patient roster and a session list, not a folder of recordings.</h2>
+    </div>
+    <div class="split">
+      <div class="stat-card">
+        <h3 style="font-size:1.02rem;">Sessions, at a glance</h3>
+        <p style="color:var(--ink-soft); font-size:.92rem; margin-top:.4rem;">The home screen shows what's outstanding without opening every record.</p>
+        <div class="stat-row">
+          <div class="stat"><div class="num">14</div><div class="lbl">Total</div></div>
+          <div class="stat"><div class="num">11</div><div class="lbl">Signed</div></div>
+          <div class="stat"><div class="num">3</div><div class="lbl">Today</div></div>
+        </div>
+      </div>
+      <div class="feature-list">
+        <div class="feature-list-item">
+          <h3>A patient roster, not a file browser</h3>
+          <p>Patients are tracked by name across sessions, so a returning patient's history is one click away instead of a search through old recordings.</p>
+        </div>
+        <div class="feature-list-item">
+          <h3>Session tiles that show status</h3>
+          <p>Each encounter shows where it stands — recorded, transcribed, drafted, or signed — so nothing is quietly left half-finished.</p>
+        </div>
+        <div class="feature-list-item">
+          <h3>One profile, every specialty you use</h3>
+          <p>Your provider profile carries your specialty into every note; a multi-specialty practice isn't a workaround, it's how the product is built.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section-alt" id="review">
+  <div class="wrap">
+    <div class="section-head">
+      <p class="eyebrow">Nothing is final by accident</p>
+      <h2>The draft is yours until you sign it.</h2>
+      <p>Generating a note produces a draft, not a finished document. Every word is editable — correct a detail, rewrite the assessment, add something the transcript missed. Nothing is locked, chained, or reported until you click <strong>Sign &amp; Attest</strong>.</p>
+    </div>
+    <div class="export-row">
+      <div class="export-chip"><span class="dot"></span> Copy to clipboard</div>
+      <div class="export-chip"><span class="dot"></span> Save as a file</div>
+      <div class="export-chip"><span class="dot"></span> Export to PDF</div>
+    </div>
+  </div>
+</section>
+
+<section id="cta">
+  <div class="wrap">
+    <div class="cta-box">
+      <div>
+        <h2>See it end to end.</h2>
+        <p>The first-run setup takes about three minutes, and your first session after that is just record, review, sign.</p>
+      </div>
+      <a class="btn btn-primary" href="get-started.html">Get started</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap footer-grid">
+    <div class="footer-byline">Greenbar Systems — makers of Tahlk</div>
+    <nav class="footer-links">
+      <a href="security.html">Security</a>
+      <a href="compliance.html">Compliance</a>
+      <a href="about.html">About</a>
+      <a href="legal.html">Legal</a>
+      <a href="#">Contact</a>
+    </nav>
+  </div>
+</footer>
